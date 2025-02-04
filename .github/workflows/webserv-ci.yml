@@ -1,0 +1,24 @@
+name: webserv CI
+
+on: [push]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: sudo apt update -y && sudo apt-get install -y build-essential php-cgi siege jq
+    - name: Build project
+      run: make
+    - name: Check if app ports are already in use
+      run: sudo lsof -i :8083 -i :8084 -i :8085 -i :8086 -i :8087 || true
+    - name: disable mono-xsp4.service that runs on port 8084 # https://github.com/actions/runner-images/issues/2821
+      run: sudo kill -9 $(sudo lsof -t -i:8084)
+    - name: Start project and run tests
+      run: |
+        make start &
+        APP_PID=$!
+        sleep 1
+        make run_tester
+        kill $APP_PID

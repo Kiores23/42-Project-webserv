@@ -1,0 +1,7 @@
+.idea/
+.vscode/
+webserv
+*.o
+a.out
+venv/
+sessions.json

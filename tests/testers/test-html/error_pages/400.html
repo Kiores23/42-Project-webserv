@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- https://codepen.io/Muhnad/pen/MoWRmm -->
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Error 400</title>
+    <style>
+        body {
+            background-color: #f1fdfd;
+            background-size: cover;
+        }
+
+        .err-status {
+            text-align: center;
+            color: #00c3cf;
+        }
+
+        .err-status__num {
+            text-align: center;
+            font-size: 20rem;
+            color: rgba(197, 244, 250, 1);
+            position: relative;
+            margin: 0;
+        }
+
+        .err-status__num:after {
+            content: attr(data-num);
+            position: absolute;
+            color: #00c7d7;
+            font-size: 15rem;
+            transform: translate(-420px, 40px);
+        }
+
+        .err-status__title {
+            color: #41535d;
+            font-size: 2rem;
+            text-transform: uppercase;
+            margin: 0
+        }
+
+        .err-status__desc {
+            color: #7c8d8d;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .goback {
+            display: inline-block;
+            background-color: #00c3cf;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="err-status">
+    <h1 data-num="400" class="err-status__num">400</h1>
+    <h2 class="err-status__title">Bad request :(</h2>
+    <p class="err-status__desc">The server could not understand the request due to invalid syntax.
+        Check the URL for errors.</p>
+    <a href="/" class="goback">Go back to home</a>
+</div>
+</body>
+</html>

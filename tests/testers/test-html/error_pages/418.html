@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- https://codepen.io/CreativePunch/pen/poJdRe -->
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Error 418 - I'm a teapot</title>
+</head>
+<body>
+<style>
+    body {
+        background: #000000;
+    }
+
+    @-webkit-keyframes rotation {
+        from {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+        }
+    }
+
+    @keyframes rotation {
+        from {
+            -webkit-transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(359deg);
+            -ms-transform: rotate(359deg);
+            transform: rotate(359deg);
+        }
+    }
+
+    #spinner {
+        height: 60px;
+        width: 60px;
+        margin: 110px auto;
+        -webkit-animation: rotation .6s infinite linear;
+        animation: rotation .6s infinite linear;
+        border-left: 6px solid rgba(0, 174, 239, 0.15);
+        border-right: 6px solid rgba(0, 174, 239, 0.15);
+        border-bottom: 6px solid rgba(0, 174, 239, 0.15);
+        border-top: 6px solid rgba(0, 174, 239, 0.8);
+        border-radius: 100%;
+    }
+
+    #rotator img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        cursor: pointer;
+    }
+</style>
+<div id="rotator">
+    <!-- Our loading animation, pure CSS, no image -->
+    <div id="spinner"></div>
+    <img src="https://i.imgur.com/WD3j8o3.jpg">
+    <img src="https://i.imgur.com/ZRjWpBG.jpg">
+    <img src="https://i.imgur.com/NhplDQW.jpg">
+    <img src="https://i.imgur.com/m6pq67G.jpg">
+    <img src="https://i.imgur.com/OOoi6mH.jpg">
+    <img src="https://i.imgur.com/4TJz5qi.jpg">
+    <img src="https://i.imgur.com/FNBkHLH.jpg">
+    <img src="https://i.imgur.com/b3sviZP.jpg">
+    <img src="https://i.imgur.com/ojl7ggn.jpg">
+    <img src="https://i.imgur.com/a0XblL3.jpg">
+    <img src="https://i.imgur.com/R1hK86n.jpg">
+    <img src="https://i.imgur.com/E7mGMRI.jpg">
+    <img src="https://i.imgur.com/y1nzSnz.jpg">
+    <img src="https://i.imgur.com/Oz27DgK.jpg">
+    <img src="https://i.imgur.com/JWaIc9M.jpg">
+    <img src="https://i.imgur.com/3Es2YuT.jpg">
+    <img src="https://i.imgur.com/2bCpLwW.jpg">
+    <img src="https://i.imgur.com/l4O4Nwm.jpg">
+    <img src="https://i.imgur.com/dp1H1KP.jpg">
+    <img src="https://i.imgur.com/uatAWYC.jpg">
+    <img src="https://i.imgur.com/F2O2P4g.jpg">
+    <img src="https://i.imgur.com/TpM3fs6.jpg">
+    <img src="https://i.imgur.com/pHsIHbD.jpg">
+    <img src="https://i.imgur.com/knctpoa.jpg">
+    <img src="https://i.imgur.com/4nEGeX7.jpg">
+    <img src="https://i.imgur.com/wfi30VM.jpg">
+    <img src="https://i.imgur.com/nj49spV.jpg">
+    <img src="https://i.imgur.com/1rkQolD.jpg">
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write("<script src='js/jquery-1.10.2.min.js'>\x3C/script>")</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.0.4/jquery.imagesloaded.min.js"></script>
+<script>
+    // Sensitivity, feel free to change this. Lower is more sensitive.
+    var threshold = 10;
+
+    // General variables
+    var loaded = false;
+    var mouseDown = false;
+    var initX = 0;
+    var currentX = 0;
+    var offset = 0;
+
+    // Image info
+    var images;
+    var currentImage;
+    var nextImage;
+    var prevImage;
+
+    $(function () {
+        $('#rotator').imagesLoaded(function () {
+            $('#spinner').fadeOut(500, function () {
+                // Initialize the image variables.
+                images = $('#rotator').find('img');
+                currentImage = images.first();
+                nextImage = currentImage.next('img');
+                // The previous image of the first image is the last image.
+                prevImage = images.last();
+
+                // Fade in the current image.
+                currentImage.fadeIn(500);
+
+                // Our rotator has been loaded.
+                loaded = true;
+            });
+
+        });
+
+        $(this).on('mousedown', function (e) {
+            e.preventDefault();
+            if (loaded) {
+                mouseDown = true;
+                initX = e.clientX;
+            }
+        });
+
+        $(this).on('mousemove', function (e) {
+            if (mouseDown) {
+                currentX = e.clientX;
+
+                // negative if you move to the left,
+                // positive if you move to the right.
+                offset = currentX - initX;
+
+                // Show the previous image if sensitivity is crossed.
+                if (offset < -threshold) {
+                    prevImage.show();
+                    currentImage.hide();
+
+                    nextImage = currentImage;
+                    currentImage = prevImage;
+                    prevImage = prevImage.prev('img');
+
+                    if (!prevImage.length) {
+                        prevImage = images.last();
+                    }
+
+                    initX = currentX;
+                }
+
+                // Show the next image if sensitivity is crossed.
+                if (offset > threshold) {
+                    nextImage.show();
+                    currentImage.hide();
+
+                    prevImage = currentImage;
+                    currentImage = nextImage;
+                    nextImage = nextImage.next('img');
+
+                    if (!nextImage.length) {
+                        nextImage = images.first();
+                    }
+
+                    initX = currentX;
+                }
+            }
+        });
+
+        $(this).on('mouseup', function () {
+            // Re-initialize some variables
+            mouseDown = false;
+            currentX = 0;
+        });
+
+    });
+</script>
+
+</body>
+</html>
